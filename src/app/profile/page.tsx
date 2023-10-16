@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export default function TasksPage() {
+export default function Profile() {
   return (
     <Container>
       <Box

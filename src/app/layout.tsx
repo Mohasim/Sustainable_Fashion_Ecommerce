@@ -22,7 +22,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
-import { Menu, SvgIcon, Tooltip } from '@mui/material';
+import { Avatar, Menu, MenuItem, SvgIcon, Tooltip } from '@mui/material';
 import { Button } from '@mui/base';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -30,6 +30,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import InputAdornment from '@mui/material/InputAdornment';
+import Logout from '@mui/icons-material/Logout';
+import Settings from '@mui/icons-material/Settings';
+import PersonAdd from '@mui/icons-material/PersonAdd';
 
 
 const DRAWER_WIDTH = 200;
@@ -46,8 +49,12 @@ const PLACEHOLDER_LINKS = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  
+  const open = Boolean(anchorEl);
 
-  const matches = useMediaQuery('(max-width:600px)');
+  const matches = useMediaQuery('(max-width:624px)');
 
   const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -63,11 +70,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     setDrawerOpen(open);
   };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => {console.log('Wishlist Clicked')} },
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action: () => {console.log('Profile Clicked')} },
+    { text: 'Profile', href: '', icon: ProfileIcon, action:handleClick },
     // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },
+  ];
+  
+  const SIGNEDIN_SUBMENU=[
+    { text: 'Profile', href: '/profile', icon: ProfileIcon, action:handleClick },
+    { text: 'My Account', href: '/', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
+    { text: 'Settings', href: '/', icon: SettingsIcon, action: () => {console.log('Setting Clicked')} },
+    { text: 'Logout', href: '/', icon: LogoutIcon, action: () => {console.log('Logout Clicked')} },
+    
+  ];
+
+  const SIGNEDOUT_SUBMENU=[
+    { text: 'Sign In', href: '/signin', icon: ProfileIcon, action:handleClick },
+    { text: 'Sign Up', href: '/signout', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
+       
   ];
   
   
@@ -90,7 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     Sustainable Fashion
                   </Typography> */}
                 </Button>
-                {/* <Toolbar sx={{ 
+                <Toolbar sx={{ 
                   backgroundColor: 'background.paper', 
                   justifyContent: 'center',
                   }}
@@ -106,7 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         ),
                       }}
                     />
-                  </Toolbar> */}
+                  </Toolbar>
                 
                 <Toolbar sx={{ 
                   backgroundColor: 'background.paper', 
@@ -160,48 +189,97 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </SwipeableDrawer>
                   </List>
                   )}
-                  
+                    <Menu
+                      anchorEl={anchorEl}
+                      id="account-menu"
+                      open={open}
+                      onClose={handleClose}
+                      onClick={handleClose}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          overflow: 'visible',
+                          filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                          mt: 1.5,
+                          '& .MuiAvatar-root': {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                          },
+                          '&:before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: 'background.paper',
+                            transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                          },
+                        },
+                      }}
+                      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    >
+
+                      {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} >
+                          <Link href={href} >
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+
+                      {!userLoggedIn && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} >
+                          <Link href={href} >
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+
+                      {/* <MenuItem onClick={handleClose} href='/profile'>
+                        <Avatar /> Profile
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <Avatar /> My account
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <PersonAdd fontSize="small" />
+                        </ListItemIcon>
+                        Add another account
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                      </MenuItem> */}
+                    </Menu>
                 </Toolbar>
             </Toolbar>
             
           </AppBar>
-          <Drawer
-            sx={{
-              width: DRAWER_WIDTH,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: DRAWER_WIDTH,
-                boxSizing: 'border-box',
-                top: ['48px', '56px', '64px'],
-                height: 'auto',
-                bottom: 0,
-              },
-            }}
-            variant="permanent"
-            anchor="left"
-          >
-            <Divider />
-         
-            <Divider sx={{ mt: 'auto' }} />
-            <List>
-              {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Icon />
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Drawer>
           <Box
             component="main"
             sx={{
               flexGrow: 1,
               bgcolor: 'background.default',
-              ml: `${DRAWER_WIDTH}px`,
               mt: ['48px', '56px', '64px'],
               p: 3,
             }}
