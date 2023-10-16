@@ -1,3 +1,20 @@
+E-commerce Website for Sustainable and Ethical Fashion
+
+Introduction
+•	The purpose of this project is to create an e-commerce website that specializes in sustainable and ethical fashion. The website will offer a platform for consumers to purchase clothing and accessories that are not only stylish but also environmentally friendly and produced ethically. The website will be designed to be user-friendly, visually appealing, and easy to navigate.
+
+Project Description:
+•	The e-commerce website will be designed to showcase a variety of sustainable and ethical fashion products, including clothing, accessories, and home goods. The website will be built using a content management system (CMS) to allow for easy updates and management of products. The website will also include a blog section where customers can read about the benefits of sustainable and ethical fashion, as well as tips on how to make their wardrobes more sustainable.
+
+Benefits of the Project:
+The benefits of this project include:
+1. Providing a platform for consumers to purchase sustainable and ethical fashion products.
+2. Educating consumers about the importance of sustainable and ethical fashion.
+3. Offering a user-friendly and visually appealing website that is easy to navigate.
+4. Providing a platform for small and medium-sized enterprises (SMEs) to showcase their products.
+5. Creating jobs and contributing to the local economy.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -16,7 +33,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
