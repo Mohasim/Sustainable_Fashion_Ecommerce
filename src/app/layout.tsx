@@ -93,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const SIGNEDOUT_SUBMENU=[
     { text: 'Sign In', href: '/signin', icon: ProfileIcon, action:handleClick },
-    { text: 'Sign Up', href: '/signout', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
+    { text: 'Sign Up', href: '/signup', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
        
   ];
   
