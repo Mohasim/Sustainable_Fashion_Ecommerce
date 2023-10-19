@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => {console.log('Wishlist Clicked')} },
-    { text: 'Profile', href: '', icon: ProfileIcon, action:handleClick },
+    { text: 'Profile', href: '/profile', icon: ProfileIcon, action:handleClick },
     // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },
   ];
   
