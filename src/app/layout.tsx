@@ -39,7 +39,6 @@ const DRAWER_WIDTH = 200;
 
 const PLACEHOLDER_LINKS = [
   { text: 'Settings', icon: SettingsIcon },
-  { text: 'Support', icon: SupportIcon },
   { text: 'Logout', icon: LogoutIcon },
 ];
 
@@ -52,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   
   const open = Boolean(anchorEl);
 
-  const matches = useMediaQuery('(max-width:624px)');
+  const mobileView = useMediaQuery('(max-width:624px)');
 
   const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -79,8 +78,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => {console.log('Wishlist Clicked')} },
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action:handleClick },
-    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },
+    { text: 'Profile', href: '/', icon: ProfileIcon, action:handleClick },
+    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },d
   ];
   
   const SIGNEDIN_SUBMENU=[
@@ -139,7 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   backgroundColor: 'background.paper', 
                   justifyContent: 'end',
                   }}>
-                    {!matches && (
+                    {!mobileView && (
                       <List sx={{display: 'flex', gap:1}}>
                       {LINKS.map(({ text, href, icon: Icon,action }) => (
                         <Tooltip title={text} placement="bottom">
@@ -159,8 +158,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       </Tooltip> */}
                     </List>
                     )}
-                  
-                  {matches && (
+                    {/* Mobile View */}
+                  {mobileView && (
                     <List sx={{display: 'flex', gap:1}}>
                     <Button onClick={toggleDrawer(true)}>
                       <MenuIcon sx={{color:'black'}} />
@@ -184,8 +183,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           </ListItem>
                         ))}
                       </List>
+                      <Divider sx={{ mt: 'auto' }} />
+                      <List>
+                      {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} >
+                          <Link href={href} >
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+
+                      {!userLoggedIn && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} >
+                          <Link href={href} >
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+                      </List>
                     </SwipeableDrawer>
                   </List>
+                    
                   )}
                     <Menu
                       anchorEl={anchorEl}
