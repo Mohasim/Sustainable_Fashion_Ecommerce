@@ -17,13 +17,15 @@ function apiHandler(handler: any) {
             try {
                 // monkey patch req.json() because it can only be called once
                 const json = await req.json();
+                console.log('json', json);
                 req.json = () => json;
             } catch {}
 
             try {
+                console.log('handler[method].schema', handler[method].schema);
                 // global middleware
                 await jwtMiddleware(req);
-                // await validateMiddleware(req, handler[method].schema);
+                await validateMiddleware(req, handler[method].schema);
 
                 // route handler
                 const responseBody = await handler[method](req, ...args);

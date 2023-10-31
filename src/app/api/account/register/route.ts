@@ -1,4 +1,4 @@
-import joi from 'joi';
+import Joi from 'joi';
 
 import { usersRepo } from '@/helpers/server';
 import { apiHandler } from '@/helpers/server/api';
@@ -12,9 +12,9 @@ async function register(req: Request) {
     await usersRepo.create(body);
 }
 
-register.schema = joi.object({
-    firstname: joi.string(),
-    lastname: joi.string(),
-    email: joi.string().required(),
-    password: joi.string().min(6).required(),
+register.schema = Joi.object({
+    firstname: Joi.string(),
+    lastname: Joi.string(),
+    email: Joi.string().required(),
+    password: Joi.string().min(6).required(),
 });

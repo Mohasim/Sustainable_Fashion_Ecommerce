@@ -20,6 +20,7 @@ function useFetch() {
             if (body) {
                 requestOptions.headers = { 'Content-Type': 'application/json' };
                 requestOptions.body = JSON.stringify(body);
+                console.log('body', body)
             }
             return fetch(url, requestOptions).then(handleResponse);
         }
