@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,38 +14,41 @@ export default function HomePage() {
   return (
     <Box sx={{ display: 'flex' }}>
       <div>
-        <Alert severity="info" sx={{ mt: 2, mb: 5 }}>
-          <AlertTitle>Hello 👋</AlertTitle>
-          This app uses the Next.js App Router and Material UI v5.
-        </Alert>
+        <Typography textAlign={'center'} marginBlock={'50'} variant="h1" component="h2">
+          Home Page
+        </Typography>
         <Grid container rowSpacing={3} columnSpacing={3}>
-          <Grid xs={6}>
+          <Grid xs={4}>
             <MediaCard
-              heading="CMYK"
-              text="The CMYK color model (also known as process color, or four color) is a subtractive color model, based on the CMY color model, used in color printing, and is also used to describe the printing process itself."
+              imageurl='https://rukminim1.flixcart.com/image/450/500/xif0q/shoe/7/2/m/6-tm-12-6-trm-white-original-imagjqyzz8z9jrgf.jpeg?q=90&crop=false'
+              heading="Shoe 1"
+              text="The durable rubber outsole offers superior traction on any surface, making them perfect for your daily adventures."
             />
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={4}>
             <MediaCard
-              heading="HSL and HSV"
-              text="HSL (for hue, saturation, lightness) and HSV (for hue, saturation, value; also known as HSB, for hue, saturation, brightness) are alternative representations of the RGB color model, designed in the 1970s by computer graphics researchers."
+              imageurl='https://images.prismic.io/sportsshoesprod/efd094c5-81f9-4624-bb82-098566268ace_HOKA_M_CLIFTON9_GTX_BBLC_DTL__JL_P8076.jpg?auto=compress,format&rect=1077,504,931,931&w=1000&h=1000'
+              heading="Shoe 2"
+              text="The durable rubber outsole offers superior traction on any surface, making them perfect for your daily adventures."
             />
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={4}>
             <MediaCard
-              heading="RGB"
-              text="An RGB color space is any additive color space based on the RGB color model. RGB color spaces are commonly found describing the input signal to display devices such as television screens and computer monitors."
+              imageurl='https://images.pexels.com/photos/19090/pexels-photo.jpg?cs=srgb&dl=pexels-web-donut-19090.jpg&fm=jpg'
+              heading="Shoe 3"
+              text="The durable rubber outsole offers superior traction on any surface, making them perfect for your daily adventures."
             />
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={4}>
             <MediaCard
-              heading="CIELAB"
-              text="The CIELAB color space, also referred to as L*a*b*, was intended as a perceptually uniform space, where a given numerical change corresponds to a similar perceived change in color."
+              imageurl='https://www.campusshoes.com/cdn/shop/products/FIRST_11G-787_WHT-SIL-B.ORG.jpg?v=1670326183'
+              heading="Shoe 4"
+              text="The durable rubber outsole offers superior traction on any surface, making them perfect for your daily adventures."
             />
           </Grid>
         </Grid>
       </div>
-      <Drawer
+      {/* <Drawer
         sx={{
           width: 122,
           flexShrink: 0,
@@ -66,7 +70,7 @@ export default function HomePage() {
             </Typography>
           </ListItem>
         </List>
-      </Drawer>
+      </Drawer> */}
     </Box>
   );
 }
