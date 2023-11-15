@@ -26,7 +26,7 @@ import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import { Avatar, Menu, MenuItem, SvgIcon, Tooltip } from '@mui/material';
-import { Button } from '@mui/base';
+import {Button} from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -35,8 +35,6 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useUserService } from '@/services/useUserService';
 // import Cookies from 'js-cookie';
-import { set } from 'mongoose';
-import { auth } from '@/helpers/server';
 
 
 
