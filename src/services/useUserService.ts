@@ -65,6 +65,9 @@ function useUserService(): IUserService {
                 userStore.setState({ currentUser: { ...currentUser, ...params } })
             }
         },
+        isAuthenticated: async () => {
+            return await fetch.get('/api/users/authenticate');
+        },
         delete: async (id) => {
             // set isDeleting prop to true on user
             userStore.setState({
@@ -114,5 +117,6 @@ interface IUserService extends IUserStore {
     getCurrent: () => Promise<void>,
     create: (user: IUser) => Promise<void>,
     update: (id: string, params: Partial<IUser>) => Promise<void>,
+    isAuthenticated: () => Promise<boolean>,
     delete: (id: string) => Promise<void>
 }

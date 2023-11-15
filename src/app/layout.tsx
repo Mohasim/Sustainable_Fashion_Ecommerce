@@ -33,6 +33,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useUserService } from '@/services/useUserService';
 // import Cookies from 'js-cookie';
 import { set } from 'mongoose';
+import { auth } from '@/helpers/server';
+
 
 
 
@@ -59,15 +61,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const mobileView = useMediaQuery('(max-width:624px)');
 
-  React.useEffect(() => {
-    userService.getCurrent();
-    const authorizationCookie = document.cookie.replace(/(?:(?:^|.*;\s*)authorization\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+  const handleLoginUpdate=() => {
+    //Login Bug workaround for now but still have to fix it
+    
+    if(!userLoggedIn){
+      userService.getCurrent();
+      console.log('User:not logged in');
+    }
+    const isAuth=userService.isAuthenticated();
 
-    // const authorizationCookie = cookies().get('authorization');
-    console.log('Cookies.get(authorization)',authorizationCookie);
+    console.log('Authorization Cookie:', user);
 
-    setUserLoggedIn(authorizationCookie ? true : false);
-  },[])
+    // setUserLoggedIn(isAuth ? true : false);
+    setUserLoggedIn(user ? true : false);
+    console.log('userLoggedIn:', userLoggedIn);
+
+  };
 
   const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -85,6 +94,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    handleLoginUpdate();
+    console.log('Profile Clicked');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
