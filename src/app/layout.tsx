@@ -118,9 +118,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => { console.log('Wishlist Clicked') } },
-    { text: 'Card', href: '/Card', icon: AddShoppingCartIcon, action: null },
+    { text: 'Card', href: '/Card', icon: AddShoppingCartIcon, action:  () => { console.log('Wishlist Clicked') }},
     { text: 'Profile', href: '', icon: ProfileIcon, action: handleClick },
-    { text: 'Orders', href: '/Order', icon: ShoppingBagIcon, action: null },
+    { text: 'Orders', href: '/Order', icon: ShoppingBagIcon, action:  () => { console.log('Wishlist Clicked') } },
     // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },d
   ];
   
