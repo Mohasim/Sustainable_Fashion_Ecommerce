@@ -33,6 +33,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import InputAdornment from '@mui/material/InputAdornment';
+import { useUserService } from '@/services/useUserService';
+// import Cookies from 'js-cookie';
+import { set } from 'mongoose';
+import { auth } from '@/helpers/server';
+
 
 
 
@@ -42,7 +47,6 @@ const DRAWER_WIDTH = 200;
 
 const PLACEHOLDER_LINKS = [
   { text: 'Settings', icon: SettingsIcon },
-  { text: 'Support', icon: SupportIcon },
   { text: 'Logout', icon: LogoutIcon },
 ];
 
@@ -52,10 +56,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [userLoggedIn, setUserLoggedIn] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  
+  const userService= useUserService();
+  const user = userService.currentUser;
 
   const open = Boolean(anchorEl);
 
-  const matches = useMediaQuery('(max-width:624px)');
+  const mobileView = useMediaQuery('(max-width:624px)');
+
+  const handleLoginUpdate=() => {
+    //Login Bug workaround for now but still have to fix it
+    
+    if(!userLoggedIn){
+      userService.getCurrent();
+      console.log('User:not logged in');
+    }
+    const isAuth=userService.isAuthenticated();
+
+    console.log('Authorization Cookie:', user);
+
+    // setUserLoggedIn(isAuth ? true : false);
+    setUserLoggedIn(user ? true : false);
+    console.log('userLoggedIn:', userLoggedIn);
+
+  };
 
   const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent,
@@ -73,27 +97,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    handleLoginUpdate();
+    console.log('Profile Clicked');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+
+
+  const handleLogout = (event: React.MouseEvent<HTMLElement>) => { 
+    setAnchorEl(event.currentTarget);
+    console.log('Logout Clicked');
+    userService.logout();
+    setUserLoggedIn(false);
+    handleClose();
+  };
+
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => { console.log('Wishlist Clicked') } },
     { text: 'Card', href: '/Card', icon: AddShoppingCartIcon, action: null },
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action: handleClick },
+    { text: 'Profile', href: '', icon: ProfileIcon, action: handleClick },
     { text: 'Orders', href: '/Order', icon: ShoppingBagIcon, action: null },
-    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },
+    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },d
   ];
-
-  const SIGNEDIN_SUBMENU = [
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action: handleClick },
-    { text: 'My Account', href: '/', icon: SettingsIcon, action: () => { console.log('My Account Clicked') } },
-    { text: 'Settings', href: '/', icon: SettingsIcon, action: () => { console.log('Setting Clicked') } },
-    { text: 'Logout', href: '/', icon: LogoutIcon, action: () => { console.log('Logout Clicked') } },
-
+  
+  const SIGNEDIN_SUBMENU=[
+    { text: 'Profile', href: '/profile', icon: ProfileIcon, action:handleClick },
+    { text: 'My Account', href: '/', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
+    { text: 'Settings', href: '/', icon: SettingsIcon, action: () => {console.log('Setting Clicked')} },
+    { text: 'Logout', href:'', icon: LogoutIcon, action: handleLogout },
+    
   ];
 
   const SIGNEDOUT_SUBMENU = [
@@ -144,7 +180,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 backgroundColor: 'background.paper',
                 justifyContent: 'end',
               }}>
-                {!matches && (
+                {!mobileView && (
                   <List sx={{ display: 'flex', gap: 1 }}>
                     {LINKS.map(({ text, href, icon: Icon, action }) => (
                       <Tooltip title={text} placement="bottom">
@@ -162,11 +198,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     {/* <Tooltip title="Menu" placement="bottom">
                       <MenuIcon sx={{color:'black'}} />
                       </Tooltip> */}
-                  </List>
-                )}
-
-                {matches && (
-                  <List sx={{ display: 'flex', gap: 1 }}>
+                    </List>
+                    )}
+                    {/* Mobile View */}
+                  {mobileView && (
+                    <List sx={{display: 'flex', gap:1}}>
                     <Button onClick={toggleDrawer(true)}>
                       <MenuIcon sx={{ color: 'black' }} />
                     </Button>
@@ -189,8 +225,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                           </ListItem>
                         ))}
                       </List>
+                      <Divider sx={{ mt: 'auto' }} />
+                      <List>
+                      {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} onClick={action}>
+                          <Link href={href} >
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+
+                      {!userLoggedIn && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                        <MenuItem key={href} >
+                          <Link href={href} onClick={action}>
+                            <ListItemIcon>
+                              <Icon />{text}
+                            </ListItemIcon>
+                          </Link>
+                        </MenuItem>
+                      ))}
+                      </List>
                     </SwipeableDrawer>
                   </List>
+                    
                 )}
                 <Menu
                   anchorEl={anchorEl}
@@ -229,7 +288,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 >
 
                   {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon, action }) => (
-                    <MenuItem key={href} >
+                    <MenuItem key={href} onClick={action}>
                       <Link href={href} >
                         <ListItemIcon>
                           <Icon />{text}

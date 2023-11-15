@@ -13,6 +13,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Alert } from '@mui/material';
+import { useUserService } from '@/services/useUserService';
 
 function Copyright(props: any) {
   return (
@@ -29,19 +31,39 @@ function Copyright(props: any) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export default function SignIn() {
+
+  const userServices = useUserService();
+  const [error, setError] = React.useState(null);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    try {
+      await userServices.login(data.get('email') as string, data.get('password') as string);
+    } 
+    catch (er: any) {  
+      setError(er.message);
+    }
+    
+
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
+        {error && (
+          <Alert severity="error">
+            An error occurred: 
+            {error}
+          </Alert>
+        )}
+
         <CssBaseline />
         <Grid
           item
@@ -73,7 +95,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form"  onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
