@@ -2,6 +2,8 @@
 import { create } from 'zustand';
 import { useFetch } from '@/helpers/client';
 
+export { useCartService };
+
 // Define the initial state for the cart store
 const initialCartState = {
   cart: [],
@@ -19,24 +21,35 @@ function useCartService(): ICartService {
     cart,
     addToCart: async (productId: string, quantity: number) => {
       // Perform any validation or business logic here if needed
-
+      
       // Update the cart state
       cartStore.setState({
-        cart: [...cart, { productId, quantity }],
+        cart: await fetch.post('/api/cart/add', { productId, quantity })
       });
     },
     removeFromCart: async (productId: string) => {
       // Update the cart state by filtering out the specified product
       cartStore.setState({
-        cart: cart.filter((item) => item.productId !== productId),
+        cart: await fetch.post('/api/cart/remove', { productId })
       });
     },
     clearCart: async () => {
       // Clear the entire cart by setting it to an empty array
       cartStore.setState({
-        cart: [],
+        cart: await fetch.post('/api/cart/clear'),
       });
     },
+    checkOut: async () => {
+      // Perform any validation or business logic here if needed
+
+      // Call the API to check out the cart
+      await fetch.post('/api/cart/checkout');
+
+      // Clear the cart
+      cartStore.setState({
+        cart: [],
+      });
+    }
     // Add additional cart-related CRUD operations as needed
   };
 }
@@ -55,5 +68,6 @@ interface ICartService extends ICartStore {
   addToCart: (productId: string, quantity: number) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
+  checkOut: () => Promise<void>;
   // Add additional cart-related CRUD operations as needed
 }

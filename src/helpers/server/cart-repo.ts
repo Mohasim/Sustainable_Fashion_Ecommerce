@@ -1,4 +1,5 @@
 import { db } from './db';
+import { headers } from 'next/headers';
 
 const Cart = db.Cart; // Adjust this based on your actual Cart model
 
@@ -9,8 +10,9 @@ export const cartRepo = {
   clearCart,
 };
 
-async function addToCart(userId: string, productId: string, quantity: number) {
+async function addToCart( productId: string, quantity: number) {
   try {
+    const userId = headers().get('userId') ||'';
     const cart = await Cart.findOneAndUpdate(
       { userId },
       {
@@ -60,9 +62,9 @@ async function clearCart(userId: string) {
   try {
 
     //need to check further if this is the right way to do it
-
-    // const cart = await Cart.findOneAndRemove({ userId });
-    // return cart;
+    console.log('clearing cart');
+    const cart = await Cart.findOneAndDelete({ userId });
+    return cart;
   } catch (error) {
     console.error('Error clearing user cart:', error);
     throw error;
