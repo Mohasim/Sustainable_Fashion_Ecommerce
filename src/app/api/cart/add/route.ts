@@ -9,6 +9,16 @@ module.exports = apiHandler({
 });
 
 async function addToCart(req: Request) {
+    const userId= headers().get('userId') ||'';
     const body = await req.json();
+    if (!body.productId) {
+        throw new Error("productId is required");
+    }
+    if (!body.quantity) {
+        throw new Error("quantity is required");
+    }
+    if (body.quantity < 1) {
+        return await cartRepo.removeFromCart(userId, body.productId);
+    }
     return await cartRepo.addToCart(body.productId, body.quantity);
 }
