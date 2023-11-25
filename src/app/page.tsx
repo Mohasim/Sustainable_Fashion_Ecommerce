@@ -1,4 +1,4 @@
-
+'use client'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -9,16 +9,55 @@ import ListItem from '@mui/material/ListItem';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import MediaCard from '@/components/MediaCard';
+import { useProductService } from '@/services/userProductService';
+import { useFetch } from '@/helpers/client';
+import { Router } from 'next/router';
+
 
 export default function HomePage() {
+
+  // const [products, setProducts] = React.useState([]);
+
+  const ProductService = useProductService();
+  const products = ProductService.products;
+  
+  React.useEffect(() => {
+    ProductService.getAll();
+    
+  }, []);
+
+  // React.useEffect(() => {
+  //   const ProductService = useProductService();
+  //   ProductService.getAll().then((fetchProducts) => {
+  //     if (fetchProducts!==undefined)
+  //       setProducts(fetchProducts);
+  //   });
+  //   console.log(products);
+  // }, []);
+
+  console.log(products);
   return (
+    
     <Box sx={{ display: 'flex' }}>
       <div>
         <Typography textAlign={'center'} marginBlock={'50'} variant="h1" component="h2">
           Home Page
         </Typography>
         <Grid container rowSpacing={3} columnSpacing={3}>
-          <Grid xs={4}>
+          {products && products.map((product) => (
+            <Grid xs={4}>
+              <MediaCard
+                altText='Shoe 1'
+                imageurl={product.image}
+                heading={product.name}
+                text={product.description}
+                // // price={product.price}
+                // id={product.id}
+              />
+            </Grid>
+          ))}
+
+          {/* <Grid xs={4}>
             <MediaCard
               imageurl='https://rukminim1.flixcart.com/image/450/500/xif0q/shoe/7/2/m/6-tm-12-6-trm-white-original-imagjqyzz8z9jrgf.jpeg?q=90&crop=false'
               heading="Shoe 1"
@@ -45,7 +84,7 @@ export default function HomePage() {
               heading="Shoe 4"
               text="The durable rubber outsole offers superior traction on any surface, making them perfect for your daily adventures."
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>
     </Box>
