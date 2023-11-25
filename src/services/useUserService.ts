@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { useRouter, useSearchParams } from 'next/navigation';
+import bcrypt from 'bcryptjs';
 
 import { useFetch } from '@/helpers/client';
 
@@ -25,7 +26,10 @@ function useUserService(): IUserService {
         user,
         currentUser,
         login: async (email, password) => {
-            
+            // if (password) {
+            //     password = bcrypt.hashSync(password, 10);
+            // }
+        
             const currentUser = await fetch.post('/api/account/login', { email, password });
             userStore.setState({ ...initialState, currentUser });
 
@@ -38,6 +42,9 @@ function useUserService(): IUserService {
             router.push('/signin');
         },
         register: async (user) => {
+            if (user.password) {
+                user.password = bcrypt.hashSync(user.password, 10);
+            }
             await fetch.post('/api/account/register', user);
             router.push('/signin');
             

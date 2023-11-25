@@ -14,9 +14,6 @@ async function addToCart(req: Request) {
     if (!body.productId) {
         throw new Error("productId is required");
     }
-    if (!body.quantity) {
-        throw new Error("quantity is required");
-    }
     if (body.quantity < 1) {
         return await cartRepo.removeFromCart(userId, body.productId);
     }
