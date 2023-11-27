@@ -135,12 +135,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     { text: 'Sign Up', href: '/signup', icon: SettingsIcon, action: () => { console.log('My Account Clicked') } },
 
   ];
+  const [fontSize, setFontSize] = React.useState<number>(16); // Initial font size
 
+  const handleFontSizeIncrease = () => {
+    setFontSize((prevSize) => prevSize + 1);
+  };
+
+  const handleFontSizeDecrease = () => {
+    setFontSize((prevSize) => Math.max(prevSize - 1, 10)); // Ensure minimum font size is 10
+  };
 
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry>
+        <ThemeRegistry fontSize={fontSize}>
           <AppBar position="fixed" sx={{ zIndex: 2000 }} >
             <Toolbar sx={{ backgroundColor: 'background.paper', justifyContent: 'space-between' }}>
               <Button href="/"  >
@@ -178,6 +186,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 backgroundColor: 'background.paper',
                 justifyContent: 'end',
               }}>
+                {/* Buttons for font size adjustment */}
+                <Button onClick={handleFontSizeIncrease}>Increase Font Size</Button>
+                <Button onClick={handleFontSizeDecrease}>Decrease Font Size</Button>
                 {!mobileView && (
                   <List sx={{ display: 'flex', gap: 1 }}>
                     {LINKS.map(({ text, href, icon: Icon, action }) => (
