@@ -35,24 +35,75 @@ export default function SignIn() {
 
   const userServices = useUserService();
   const [error, setError] = React.useState(null);
+  const formRef = React.useRef(null);
+
+  const handleSpeak = (text:string) => {
+    if ('speechSynthesis' in window) {
+      const speechSynthesis = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Optional: Customize voice, rate, pitch, etc.
+      // utterance.voice = speechSynthesis.getVoices()[0];
+      // utterance.rate = 1;
+      // utterance.pitch = 1;
+
+      speechSynthesis.speak(utterance);
+    } else {
+      console.error('Text-to-speech is not supported in this browser.');
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const email = data.get('email') as string;
+    const password = data.get('password') as string;
     try {
-      await userServices.login(data.get('email') as string, data.get('password') as string);
+      await userServices.login(email, password);
+      handleSpeak(`Welcome, ${email}, you have successfully logged in.`);
+
     } 
     catch (er: any) {  
       setError(er.message);
+      handleSpeak(`Login failed. ${er.message}`);
     }
-    
-
   };
+
+  const handleShiftPress = (event:React.KeyboardEvent) => {
+   // Check if the "Shift" key is pressed (key code 16)
+    if (event.key === 'Shift') {
+      // Get the text content of the form and read it
+      const formText = (formRef.current as HTMLFormElement | null )?.innerText.trim();
+      // if (formText) {
+      //   handleSpeak(formText);
+      // }
+      const form = (formRef.current as HTMLFormElement | null );
+      const emailInput = form?.elements.namedItem('email') as HTMLInputElement | null;
+      const emailValue = emailInput?.value;
+
+      if (formText || emailValue) {
+        handleSpeak(`Form Content: ${formText}. Email Value: ${emailValue}`);
+      }
+
+      // Get the form element and focus the first input
+      
+      const firstInput = form?.querySelector('input');
+      firstInput?.focus();
+
+    }
+  };
+  React.useEffect(() => {
+    // Add event listener for "Shift" key press
+    window.addEventListener('keydown', handleShiftPress as unknown as (event: Event) => void);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleShiftPress as unknown as (event: Event) => void);
+    };
+
+  }, []); // Empty dependency array ensures the effect runs once after the initial render
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -95,7 +146,7 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form"  onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" ref={formRef} onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
