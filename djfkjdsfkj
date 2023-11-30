@@ -1,0 +1,90 @@
+[33mcommit 4c9c3aa6fd3f850d26290618b07105dc5ffe9f5e[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Merge: 97ae9e1 4b07cef
+Author: Muhammad Rizwan <rexwaann@gmail.com>
+Date:   Fri Nov 3 21:19:22 2023 +0400
+
+    Merge branch 'master' of https://github.com/Mohasim/sustainable_fashion_ecommerce
+
+[33mcommit 97ae9e1b9c89a2743cb33786c7843a49d85f3bf0[m
+Author: Muhammad Rizwan <rexwaann@gmail.com>
+Date:   Fri Nov 3 21:16:50 2023 +0400
+
+    Homepage Fix, orderpage has been created and add to cart page is created
+
+[33mcommit 4b07cef5fb2df850e1c5fa91e86b8eb865b7949a[m
+Merge: 4759353 21994ea
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Tue Oct 24 19:11:41 2023 -0400
+
+    Merge branch 'master' of https://github.com/Mohasim/sustainable_fashion_ecommerce
+
+[33mcommit eedbb1e01f4fc2a0d3cfcd813b3e5d6d650e3ca6[m
+Merge: e0fc74a 0ad9de7
+Author: Rizwan rana <rexwaann@gmail.com>
+Date:   Fri Oct 20 00:30:03 2023 +0400
+
+    Merge branch 'master' of https://github.com/Mohasim/sustainable_fashion_ecommerce
+
+[33mcommit 21994ea41d551a8959e4496150aabc653724a1c2[m
+Merge: e0fc74a 0ad9de7
+Author: Rizwan rana <rizwaannn@gmail.com>
+Date:   Fri Oct 20 00:30:03 2023 +0400
+
+    Merge branch 'master' of https://github.com/Mohasim/sustainable_fashion_ecommerce
+
+[33mcommit 4759353afcaf5dc6919f3449a61e5482d8d9b9a9[m
+Merge: e0fc74a 0ad9de7
+Author: Nirtan <Nirtan@DESKTOP-SGUT8DH>
+Date:   Fri Oct 20 00:30:03 2023 +0400
+
+    Merge branch 'master' of https://github.com/Mohasim/sustainable_fashion_ecommerce
+
+[33mcommit e0fc74a4f22b187f7ad595b178582e450c39ad13[m
+Author: Nirtan <Nirtan@DESKTOP-SGUT8DH>
+Date:   Fri Oct 20 00:27:10 2023 +0400
+
+    Profile code added
+
+[33mcommit 0ad9de71eae7661d4b02483715e659aa1312b8a6[m
+Author: JayPatel5999 <Jpatel9102@conestogac.on.ca>
+Date:   Wed Oct 18 23:47:53 2023 -0400
+
+    Creating Signup
+    
+    Created the Signup Page and made necessary changes for the layout
+
+[33mcommit 93f43033948aafaa8091ac2a1070a9b1a1dfc52d[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Mon Oct 16 17:45:15 2023 -0400
+
+    minor chaaange in text
+
+[33mcommit a19f0e7d6d55e49f59e52c9a6b05e33ca03f13a0[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Mon Oct 16 17:40:37 2023 -0400
+
+    signin page created and some updates to NavBar
+
+[33mcommit 406cf9562e7ff2178425763fcad4137912931330[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Mon Oct 16 04:40:53 2023 -0400
+
+    Update README.md
+
+[33mcommit b70011840c12a31d06de3cc19d89400eb7f6a74a[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Mon Oct 16 04:39:35 2023 -0400
+
+    readme.md Update
+
+[33mcommit adb65d61c6100cf08c85ccb585344e5a20769432[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Mon Oct 16 04:36:41 2023 -0400
+
+    Layout Ready
+
+[33mcommit a6179f7d3f8cd14539890eebbf5f768396bb97b8[m
+Author: Mohasim <Mmansuri8381@conestogac.on.ca>
+Date:   Sun Oct 15 22:13:33 2023 -0400
+
+    Initial commit from Create Next App

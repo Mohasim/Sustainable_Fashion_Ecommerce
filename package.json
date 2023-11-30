@@ -17,6 +17,7 @@
     "@mui/material": "^5.14.13",
     "mdb-react-ui-kit": "^6.3.0",
     "next": "13.5.4",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18"
   },
