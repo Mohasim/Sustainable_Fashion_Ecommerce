@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useUserService } from '@/services/useUserService';
 
 function Copyright(props: any) {
   return (
@@ -27,17 +28,37 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
+
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const userServices = useUserService();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
+    
+    
+    const user: any = {};
+    data.forEach((value, key) => {
+      user[key] = value.toString();
     });
+
+    console.log('user',JSON.stringify(user));
+
+    try {
+      // Example: register user using your userServices
+      await userServices.register(user);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+
   };
 
   return (

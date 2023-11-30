@@ -26,16 +26,15 @@ import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import { Avatar, Menu, MenuItem, SvgIcon, Tooltip } from '@mui/material';
-import { Button } from '@mui/base';
+import {Button} from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useSession, signIn, signOut } from "next-auth/react"
-import { Session } from 'inspector';
-import { SessionProvider } from "next-auth/react";
+
+
 
 const DRAWER_WIDTH = 200;
 
@@ -44,7 +43,7 @@ const DRAWER_WIDTH = 200;
 const PLACEHOLDER_LINKS = [
   { text: 'Settings', icon: SettingsIcon },
   { text: 'Support', icon: SupportIcon },
-  { text: 'Logout', icon: LogoutIcon }
+  { text: 'Logout', icon: LogoutIcon },
 ];
 
 
@@ -54,8 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [userLoggedIn, setUserLoggedIn] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
- 
+
   const matches = useMediaQuery('(max-width:624px)');
 
   const toggleDrawer = (open: boolean) => (
@@ -74,27 +74,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    handleLoginUpdate();
+    console.log('Profile Clicked');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+
+
+  const handleLogout = (event: React.MouseEvent<HTMLElement>) => { 
+    setAnchorEl(event.currentTarget);
+    console.log('Logout Clicked');
+    userService.logout();
+    setUserLoggedIn(false);
+    handleClose();
+  };
+
   const LINKS = [
     { text: 'Home', href: '/', icon: HomeIcon },
     { text: 'Wishlist', href: '/wishlist', icon: StarIcon, action: () => { console.log('Wishlist Clicked') } },
-    { text: 'Card', href: '/Card', icon: AddShoppingCartIcon, action: null },
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action: handleClick },
-    { text: 'Orders', href: '/Order', icon: ShoppingBagIcon, action: null },
-    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },
+    { text: 'Card', href: '/Card', icon: AddShoppingCartIcon, action:  () => { console.log('Wishlist Clicked') }},
+    { text: 'Profile', href: '', icon: ProfileIcon, action: handleClick },
+    { text: 'Orders', href: '/Order', icon: ShoppingBagIcon, action:  () => { console.log('Wishlist Clicked') } },
+    // { text: 'Menu', href:'', icon: MenuIcon, action: toggleDrawer(true) },d
   ];
-
-  const SIGNEDIN_SUBMENU = [
-    { text: 'Profile', href: '/profile', icon: ProfileIcon, action: handleClick },
-    { text: 'My Account', href: '/', icon: SettingsIcon, action: () => { console.log('My Account Clicked') } },
-    { text: 'Settings', href: '/', icon: SettingsIcon, action: () => { console.log('Setting Clicked') } },
-    { text: 'Logout', href: '/', icon: LogoutIcon, action: () => { console.log('Logout Clicked') } },
-
+  
+  const SIGNEDIN_SUBMENU=[
+    { text: 'Profile', href: '/profile', icon: ProfileIcon, action:handleClick },
+    { text: 'My Account', href: '/', icon: SettingsIcon, action: () => {console.log('My Account Clicked')} },
+    { text: 'Settings', href: '/', icon: SettingsIcon, action: () => {console.log('Setting Clicked')} },
+    { text: 'Logout', href:'', icon: LogoutIcon, action: handleLogout },
+    
   ];
 
   const SIGNEDOUT_SUBMENU = [
@@ -144,105 +156,103 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   />
                 </Toolbar>
 
-                <Toolbar sx={{
-                  backgroundColor: 'background.paper',
-                  justifyContent: 'end',
-                }}>
-                  {!matches && (
-                    
-                    <List sx={{ display: 'flex', gap: 1 }}>
-                      
-                      {LINKS.map(({ text, href, icon: Icon, action }) => (
-                        <Tooltip title={text} placement="bottom">
-                          <ListItem key={href} disablePadding>
-                            <ListItemButton component={Link} href={href} sx={{ width: '50px' }} onClick={action}>
-                              <ListItemIcon>
-                                <Icon />
-                              </ListItemIcon>
-                              {/* <ListItemText primary={text} sx={{color:'black'}}/> */}
-                            </ListItemButton>
-                          </ListItem>
-                        </Tooltip>
-                      ))}
+              <Toolbar sx={{
+                backgroundColor: 'background.paper',
+                justifyContent: 'end',
+              }}>
+                {!matches && (
+                  <List sx={{ display: 'flex', gap: 1 }}>
+                    {LINKS.map(({ text, href, icon: Icon, action }) => (
+                      <Tooltip title={text} placement="bottom">
+                        <ListItem key={href} disablePadding>
+                          <ListItemButton component={Link} href={href} sx={{ width: '50px' }} onClick={action}>
+                            <ListItemIcon>
+                              <Icon />
+                            </ListItemIcon>
+                            {/* <ListItemText primary={text} sx={{color:'black'}}/> */}
+                          </ListItemButton>
+                        </ListItem>
+                      </Tooltip>
+                    ))}
 
                       {/* <Tooltip title="Menu" placement="bottom">
                       <MenuIcon sx={{color:'black'}} />
                       </Tooltip> */}
-                    </List>
-                  )}
+                  </List>
+                )}
 
-                  {matches && (
-                    <List sx={{ display: 'flex', gap: 1 }}>
-                      <Button onClick={toggleDrawer(true)}>
-                        <MenuIcon sx={{ color: 'black' }} />
-                      </Button>
-                      <SwipeableDrawer
-                        anchor='right'
-                        open={drawerOpen}
-                        onClose={toggleDrawer(false)}
-                        onOpen={toggleDrawer(true)}
-                        sx={{ zIndex: 2000 }}
-                      >
-                        <List>
-                          {LINKS.map(({ text, href, icon: Icon, action }) => (
-                            <ListItem key={href} disablePadding>
-                              <ListItemButton component={Link} href={href} >
-                                <ListItemIcon>
-                                  <Icon />
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                              </ListItemButton>
-                            </ListItem>
-                          ))}
-                        </List>
-                      </SwipeableDrawer>
-                    </List>
-                  )}
-                  <Menu
-                    anchorEl={anchorEl}
-                    id="account-menu"
-                    open={open}
-                    onClose={handleClose}
-                    onClick={handleClose}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        overflow: 'visible',
-                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                        mt: 1.5,
-                        '& .MuiAvatar-root': {
-                          width: 32,
-                          height: 32,
-                          ml: -0.5,
-                          mr: 1,
-                        },
-                        '&:before': {
-                          content: '""',
-                          display: 'block',
-                          position: 'absolute',
-                          top: 0,
-                          right: 14,
-                          width: 10,
-                          height: 10,
-                          bgcolor: 'background.paper',
-                          transform: 'translateY(-50%) rotate(45deg)',
-                          zIndex: 0,
-                        },
+                {matches && (
+                  <List sx={{ display: 'flex', gap: 1 }}>
+                    <Button onClick={toggleDrawer(true)}>
+                      <MenuIcon sx={{ color: 'black' }} />
+                    </Button>
+                    <SwipeableDrawer
+                      anchor='right'
+                      open={drawerOpen}
+                      onClose={toggleDrawer(false)}
+                      onOpen={toggleDrawer(true)}
+                      sx={{ zIndex: 2000 }}
+                    >
+                      <List>
+                        {LINKS.map(({ text, href, icon: Icon, action }) => (
+                          <ListItem key={href} disablePadding>
+                            <ListItemButton component={Link} href={href} >
+                              <ListItemIcon>
+                                <Icon />
+                              </ListItemIcon>
+                              <ListItemText primary={text} />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </SwipeableDrawer>
+                  </List>
+                )}
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={open}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
                       },
-                    }}
-                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                  >
+                      '&:before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
 
-                    {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon, action }) => (
-                      <MenuItem key={href} >
-                        <Link href={href} >
-                          <ListItemIcon>
-                            <Icon />{text}
-                          </ListItemIcon>
-                        </Link>
-                      </MenuItem>
-                    ))}
+                  {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon, action }) => (
+                    <MenuItem key={href} >
+                      <Link href={href} >
+                        <ListItemIcon>
+                          <Icon />{text}
+                        </ListItemIcon>
+                      </Link>
+                    </MenuItem>
+                  ))}
 
                     {!session && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon, action }) => (
                       <MenuItem key={href} >
