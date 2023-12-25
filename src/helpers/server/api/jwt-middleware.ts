@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { auth } from '@/helpers/server/auth';
+import {product} from '@/app/api'
 
 export { jwtMiddleware };
 
