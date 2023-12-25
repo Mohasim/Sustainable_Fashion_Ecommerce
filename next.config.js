@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/api/(.*)",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          // Add other headers as needed
+        ],
+      },
+    ];
+  },
   reactStrictMode: true,
   swcMinify: true,
   modularizeImports: {
