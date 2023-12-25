@@ -29,7 +29,7 @@ function useUserService(): IUserService {
         currentUser,
         login: async (email, password) => {
             
-            const currentUser = await fetch.post(`${apiurl}/api/account/login`, { email, password });
+            const currentUser = await fetch.post(`/api/account/login`, { email, password });
             userStore.setState({ ...initialState, currentUser });
 
             // get return url from query parameters or default to '/'
@@ -37,31 +37,31 @@ function useUserService(): IUserService {
             router.push(returnUrl);
         },
         logout: async () => {
-            await fetch.post(`${apiurl}/api/account/logout`);
+            await fetch.post(`/api/account/logout`);
             router.push('/signin');
         },
         register: async (user) => {
-            await fetch.post(`${apiurl}/api/account/register`, user);
+            await fetch.post(`/api/account/register`, user);
             router.push('/signin');
             
         },
         getAll: async () => {
-            userStore.setState({ users: await fetch.get(`${apiurl}/api/users`) });
+            userStore.setState({ users: await fetch.get(`/api/users`) });
         },
         getById: async (id) => {
             userStore.setState({ user: undefined });
-            userStore.setState({ user: await fetch.get(`${apiurl}/api/users/${id}`) });
+            userStore.setState({ user: await fetch.get(`/api/users/${id}`) });
         },
         getCurrent: async () => {
             if (!currentUser) {
-                userStore.setState({ currentUser: await fetch.get(`${apiurl}/api/users/current`) });
+                userStore.setState({ currentUser: await fetch.get(`/api/users/current`) });
             }
         },
         create: async (user) => {
-            await fetch.post(`${apiurl}/api/users`, user);
+            await fetch.post(`/api/users`, user);
         },
         update: async (id, params) => {
-            await fetch.put(`${apiurl}/api/users/${id}`, params);
+            await fetch.put(`/api/users/${id}`, params);
 
             // update current user if the user updated their own record
             if (id === currentUser?.id) {
@@ -69,7 +69,7 @@ function useUserService(): IUserService {
             }
         },
         isAuthenticated: async () => {
-            return await fetch.get(`${apiurl}/api/users/authenticate`);
+            return await fetch.get(`/api/users/authenticate`);
         },
         delete: async (id) => {
             // set isDeleting prop to true on user
@@ -81,7 +81,7 @@ function useUserService(): IUserService {
             });
 
             // delete user
-            const response = await fetch.delete(`${apiurl}/api/users/${id}`);
+            const response = await fetch.delete(`/api/users/${id}`);
 
             // remove deleted user from state
             userStore.setState({ users: users!.filter(x => x.id !== id) });
