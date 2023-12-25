@@ -6,11 +6,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function MediaCard({ heading, text, imageurl }: { heading: string; text: string; imageurl: string }) {
+export default function MediaCard({ heading, text, imageurl,altText }: { heading: string; text: string; imageurl: string; altText: string; }) {
   return (
     <Card>
       <Image
-        alt="Random image"
+        alt={altText}
         src={imageurl}
         width={640}
         height={480}
@@ -25,8 +25,8 @@ export default function MediaCard({ heading, text, imageurl }: { heading: string
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small">Add to Cart</Button>
+        <Button size="small">Details</Button>
       </CardActions>
     </Card>
   );

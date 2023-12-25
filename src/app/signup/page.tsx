@@ -34,6 +34,23 @@ const defaultTheme = createTheme();
 export default function SignUp() {
 
   const userServices = useUserService();
+  const formRef = React.useRef(null);
+
+  const handleSpeak = (text:string) => {
+    if ('speechSynthesis' in window) {
+      const speechSynthesis = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Optional: Customize voice, rate, pitch, etc.
+      // utterance.voice = speechSynthesis.getVoices()[0];
+      // utterance.rate = 1;
+      // utterance.pitch = 1;
+
+      speechSynthesis.speak(utterance);
+    } else {
+      console.error('Text-to-speech is not supported in this browser.');
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,6 +78,51 @@ export default function SignUp() {
 
   };
 
+  const handleShiftPress = (event:React.KeyboardEvent) => {
+    // Check if the "Shift" key is pressed (key code 16)
+     if (event.key === 'Shift') {
+       // Get the text content of the form and read it
+       const formText = (formRef.current as HTMLFormElement | null )?.innerText.trim();
+       // if (formText) {
+       //   handleSpeak(formText);
+       // }
+       const form = (formRef.current as HTMLFormElement | null );
+       const inputValues = Array.from(form?.elements??[])
+          .filter((element) => element instanceof HTMLInputElement)
+          .map((input) => `${(input as HTMLInputElement).name}: ${(input as HTMLInputElement).value }`);
+       
+ 
+       if (formText ) {
+         handleSpeak(`Form Content: ${formText}`);
+       }else{
+        console.log('formText is empty'+formText);
+       }
+       if (inputValues.length) {
+         handleSpeak(`Form Inputs: ${inputValues.join(', ')}`);
+       }else{
+        console.log('inputValues is empty'+inputValues);
+       }
+ 
+       // Get the form element and focus the first input
+       
+       const firstInput = form?.querySelector('input');
+       firstInput?.focus();
+ 
+     }
+   };
+
+  React.useEffect(() => {
+    // Add event listener for "Shift" key press
+    window.addEventListener('keydown', handleShiftPress as unknown as (event: Event) => void);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleShiftPress as unknown as (event: Event) => void);
+    };
+
+  }, []); // Empty dependency array ensures the effect runs once after the initial render
+
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -79,7 +141,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate ref={formRef} onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
