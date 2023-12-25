@@ -22,17 +22,17 @@ function useProductService(): IProductService {
     products,
     product,
     getAll: async () => {
-      productStore.setState({ products: await fetch.get('/api/products') });
+      productStore.setState({ products: await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/products`) });
     },
     getById: async (id) => {
       productStore.setState({ product: undefined });
-      productStore.setState({ product: await fetch.get(`/api/products/${id}`) });
+      productStore.setState({ product: await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/products/${id}`) });
     },
     create: async (product) => {
-      await fetch.post('/api/products', product);
+      await fetch.post(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/products`, product);
     },
     update: async (id, params) => {
-      await fetch.put(`/api/products/${id}`, params);
+      await fetch.put(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/products/${id}`, params);
     },
     delete: async (id) => {
       // set isDeleting prop to true on product
@@ -46,7 +46,7 @@ function useProductService(): IProductService {
       });
 
       // delete product
-      await fetch.delete(`/api/products/${id}`);
+      await fetch.delete(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/products/${id}`);
 
       // remove deleted product from state
       productStore.setState({ products: products!.filter((x) => x.id !== id) });
