@@ -14,6 +14,7 @@ function useFetch() {
 
     function request(method: string) {
         return (url: string, body?: any) => {
+            
             const requestOptions: any = {
                 method
             };

@@ -24,7 +24,7 @@ function apiHandler(handler: any) {
             try {
                 console.log('handler[method].schema', method);
                 // global middleware
-                if (method !== 'GET')
+                if (method !=='GET')
                 await jwtMiddleware(req);
 
                 await validateMiddleware(req, handler[method].schema);

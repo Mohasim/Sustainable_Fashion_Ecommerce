@@ -18,6 +18,9 @@ function useUserService(): IUserService {
     const fetch = useFetch();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const apiurl=process.env.NEXT_PUBLIC_BASE_API_URL;
+    console.log('apiurl',apiurl);
+
     const { users, user, currentUser } = userStore();
 
     return {
@@ -26,7 +29,7 @@ function useUserService(): IUserService {
         currentUser,
         login: async (email, password) => {
             
-            const currentUser = await fetch.post(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/login`, { email, password });
+            const currentUser = await fetch.post(`${apiurl}/api/account/login`, { email, password });
             userStore.setState({ ...initialState, currentUser });
 
             // get return url from query parameters or default to '/'
@@ -34,31 +37,31 @@ function useUserService(): IUserService {
             router.push(returnUrl);
         },
         logout: async () => {
-            await fetch.post(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/logout`);
+            await fetch.post(`${apiurl}/api/account/logout`);
             router.push('/signin');
         },
         register: async (user) => {
-            await fetch.post(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/register`, user);
+            await fetch.post(`${apiurl}/api/account/register`, user);
             router.push('/signin');
             
         },
         getAll: async () => {
-            userStore.setState({ users: await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users`) });
+            userStore.setState({ users: await fetch.get(`${apiurl}/api/users`) });
         },
         getById: async (id) => {
             userStore.setState({ user: undefined });
-            userStore.setState({ user: await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users/${id}`) });
+            userStore.setState({ user: await fetch.get(`${apiurl}/api/users/${id}`) });
         },
         getCurrent: async () => {
             if (!currentUser) {
-                userStore.setState({ currentUser: await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users/current`) });
+                userStore.setState({ currentUser: await fetch.get(`${apiurl}/api/users/current`) });
             }
         },
         create: async (user) => {
-            await fetch.post(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users`, user);
+            await fetch.post(`${apiurl}/api/users`, user);
         },
         update: async (id, params) => {
-            await fetch.put(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users/${id}`, params);
+            await fetch.put(`${apiurl}/api/users/${id}`, params);
 
             // update current user if the user updated their own record
             if (id === currentUser?.id) {
@@ -66,7 +69,7 @@ function useUserService(): IUserService {
             }
         },
         isAuthenticated: async () => {
-            return await fetch.get(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users/authenticate`);
+            return await fetch.get(`${apiurl}/api/users/authenticate`);
         },
         delete: async (id) => {
             // set isDeleting prop to true on user
@@ -78,7 +81,7 @@ function useUserService(): IUserService {
             });
 
             // delete user
-            const response = await fetch.delete(`${process.env.PUBLIC_NEXT_BASE_API_URL}/api/users/${id}`);
+            const response = await fetch.delete(`${apiurl}/api/users/${id}`);
 
             // remove deleted user from state
             userStore.setState({ users: users!.filter(x => x.id !== id) });

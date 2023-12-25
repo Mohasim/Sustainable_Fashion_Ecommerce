@@ -15,10 +15,13 @@ async function jwtMiddleware(req: NextRequest) {
 
 function isPublicPath(req: NextRequest) {
     // public routes that don't require authentication
+   
     const publicPaths = [
-        `POST:${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/login`,
-        `POST:${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/logout`,
-        `POST:${process.env.PUBLIC_NEXT_BASE_API_URL}/api/account/register`
+        `POST:/api/account/login`,
+        `POST:/api/account/logout`,
+        `POST:/api/account/register`
     ];
+    console.log('req.method', req.method);
+    console.log('req.nextUrl.pathname', req.nextUrl.pathname);
     return publicPaths.includes(`${req.method}:${req.nextUrl.pathname}`);
 }
