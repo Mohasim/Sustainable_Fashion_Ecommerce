@@ -95,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    handleLoginUpdate();
+    // handleLoginUpdate();
     console.log('Profile Clicked');
     setAnchorEl(event.currentTarget);
   };
@@ -236,7 +236,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       </List>
                       <Divider sx={{ mt: 'auto' }} />
                       <List>
-                      {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                      {user && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
                         <MenuItem key={href} onClick={action}>
                           <Link href={href} >
                             <ListItemIcon>
@@ -246,7 +246,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </MenuItem>
                       ))}
 
-                      {!userLoggedIn && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
+                      {!user && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon ,action}) => (
                         <MenuItem key={href} >
                           <Link href={href} onClick={action}>
                             <ListItemIcon>
@@ -296,7 +296,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
 
-                  {userLoggedIn && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon, action }) => (
+                  {user && SIGNEDIN_SUBMENU.map(({ text, href, icon: Icon, action }) => (
                     <MenuItem key={href} onClick={action}>
                       <Link href={href} >
                         <ListItemIcon>
@@ -306,7 +306,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </MenuItem>
                   ))}
 
-                  {!userLoggedIn && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon, action }) => (
+                  {!user && SIGNEDOUT_SUBMENU.map(({ text, href, icon: Icon, action }) => (
                     <MenuItem key={href} >
                       <Link href={href} >
                         <ListItemIcon>
